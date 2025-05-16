@@ -1,0 +1,95 @@
+/* NPS Dark Theme - Inspired by Argon Theme */
+:root {
+    --primary-color: #5e72e4;
+    --dark-bg: #1e1e1e;
+    --dark-secondary: #2d3035;
+    --text-color: #cccccc;
+    --blur-radius-dark: 20px;
+    --blur-opacity-dark: 0.6;
+}
+
+body.dark-mode {
+    background: var(--dark-bg);
+    color: var(--text-color);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.dark-mode .loginColumns {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    margin: 0;
+}
+
+.dark-mode .ibox-content {
+    background: rgba(45, 48, 53, 0.8);
+    -webkit-backdrop-filter: blur(var(--blur-radius-dark));
+    backdrop-filter: blur(var(--blur-radius-dark));
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.dark-mode .ibox-content {
+    background-color: rgba(0, 0, 0, var(--blur-opacity-dark));
+    border: none;
+    border-radius: 6px;
+}
+
+.dark-mode .form-control {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-color);
+    border-radius: 6px;
+    height: 45px;
+    padding: 10px 15px;
+    transition: all 0.3s ease;
+}
+
+.dark-mode .form-control:focus {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 15px rgba(94, 114, 228, 0.2);
+}
+
+.dark-mode .btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    border-radius: 6px;
+    height: 45px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+}
+
+.dark-mode .btn-primary:hover {
+    background-color: #4559c9;
+    border-color: #4559c9;
+    transform: translateY(-1px);
+    box-shadow: 0 5px 15px rgba(94, 114, 228, 0.3);
+}
+
+.dark-mode .navbar {
+    background-color: var(--dark-secondary);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .footer {
+    background: transparent;
+    color: var(--text-color);
+}
+
+.dark-mode a {
+    color: var(--primary-color);
+}
+
+.dark-mode a:hover {
+    color: #4559c9;
+}

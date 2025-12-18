@@ -1,4 +1,4 @@
-<div class="row tile" style="background-color: #1e1e2d;">
+<div class="row tile">
     <div class="col-md-12 col-md-auto">
         <div class="ibox float-e-margins">
             <h3 class="ibox-title" langtag="page-add"></h3>
@@ -13,6 +13,7 @@
                                 <span id="caseudp" langtag="info-caseudp"></span>
                                 <span id="casehttpProxy" langtag="info-casehttpproxy"></span>
                                 <span id="casesocks5" langtag="info-casesocks5"></span>
+                                <span id="casemixProxy" langtag="info-casemixproxy"></span>
                                 <span id="casesecret" langtag="info-casesecret"></span>
                                 <span id="casep2p" langtag="info-casep2p"></span>
                                 <span id="casefile" langtag="info-casefile"></span>
@@ -20,8 +21,9 @@
                             <select class="form-control selectpicker" id="type" name="type">
                                 <option value="tcp" langtag="scheme-tcp"></option>
                                 <option value="udp" langtag="scheme-udp"></option>
-                                <option value="httpProxy" langtag="scheme-httpProxy"></option>
-                                <option value="socks5" langtag="scheme-socks5"></option>
+                                <option value="mixProxy" langtag="scheme-mixProxy"></option>
+                                {{/*<option value="httpProxy" langtag="scheme-httpProxy"></option>*/}}
+                                {{/*<option value="socks5" langtag="scheme-socks5"></option>*/}}
                                 <option value="secret" langtag="scheme-secret"></option>
                                 <option value="p2p" langtag="scheme-p2p"></option>
                                 {{/*<option value="file" langtag="scheme-file"></option>*/}}
@@ -54,6 +56,17 @@
                             <input class="form-control" langtag="info-suchasport" name="port" placeholder="" type="text">
                         </div>
                     </div>
+                    <div class="form-group" id="mix_proxy">
+                        <label class="control-label font-bold" langtag="scheme-mixproxy"></label>
+                        <div class="col-sm-12">
+						    <input name="enable_http" type="checkbox" value="1" checked>
+                            <span class="help-block m-b-none" langtag="word-enablehttpproxy"></span>
+                        </div>
+                        <div class="col-sm-12">
+						    <input name="enable_socks5" type="checkbox" value="1" checked>
+                            <span class="help-block m-b-none" langtag="word-enablesocks5proxy"></span>
+                        </div>
+                    </div>
                     {{if eq true .allow_flow_limit}}
                     <div class="form-group" id="flow_limit">
                         <label class="control-label font-bold" langtag="word-flowlimit"></label>
@@ -82,7 +95,7 @@
                             </select>
                         </div>
                     </div>
-                    {{if eq true .allow_local_proxy}}
+                    {{if and .allow_local_proxy (or .isAdmin .allow_user_local)}}
                     <div class="form-group" id="local_proxy">
                         <label class="control-label font-bold" langtag="word-proxytolocal"></label>
                         <div class="col-sm-12">
@@ -98,6 +111,16 @@
                         <div class="col-sm-12">
                             <textarea class="form-control" langtag="info-suchasauth" name="auth" placeholder="" rows="4"></textarea>
                             <span class="help-block m-b-none" langtag="info-targetauth"></span>
+                        </div>
+                    </div>
+                    <div class="form-group" id="target_type">
+                        <label class="control-label font-bold" langtag="word-targettype"></label>
+                        <div class="col-sm-12">
+                            <select class="form-control selectpicker" name="target_type">
+                                <option value="all">ALL</option>
+                                <option value="tcp">TCP</option>
+                                <option value="udp">UDP</option>
+                            </select>
                         </div>
                     </div>
                     <div class="form-group" id="target">
@@ -128,7 +151,7 @@
                     </div>
                     <div class="hr-line-dashed"></div>
                     <div class="form-group">
-                        <div class="col-sm-4 col-sm-offset-2">
+                        <div class="col-lg-12 col-sm-offset-2">
                             <button class="btn btn-secondary" onclick="goback()" type="button">
                                 <i class="fa fa-fw fa-lg fa-window-close"></i> <span langtag="word-cancel"></span>
                             </button>
@@ -145,13 +168,14 @@
 
 <script>
     var arr = []
-    arr["all"] = ["auth", "port", "target", "password", "flow_reset", "flow_limit", "time_limit", "local_path", "strip_pre", "proxy_protocol", "local_proxy", "client_id", "server_ip"]
+    arr["all"] = ["auth", "port", "target", "password", "flow_reset", "flow_limit", "time_limit", "mix_proxy", "local_path", "strip_pre", "proxy_protocol", "local_proxy", "client_id", "server_ip"]
     arr["tcp"] = ["port", "target", "proxy_protocol", "local_proxy", "client_id", "server_ip", "flow_reset", "flow_limit", "time_limit"]
-    arr["udp"] = ["port", "target", "local_proxy", "client_id", "server_ip", "flow_reset", "flow_limit", "time_limit"]
-    arr["socks5"] = ["auth", "port", "client_id", "server_ip", "flow_reset", "flow_limit", "time_limit"]
-    arr["httpProxy"] = ["auth", "port", "client_id", "server_ip", "flow_reset", "flow_limit", "time_limit"]
-    arr["secret"] = ["target", "password", "client_id", "server_ip", "flow_reset", "flow_limit", "time_limit"]
-    arr["p2p"] = ["target", "password", "client_id", "server_ip", "flow_reset", "flow_limit", "time_limit"]
+    arr["udp"] = ["port", "target", "proxy_protocol", "local_proxy", "client_id", "server_ip", "flow_reset", "flow_limit", "time_limit"]
+    arr["mixProxy"] = ["auth", "port", "client_id", "server_ip", "mix_proxy", "flow_reset", "flow_limit", "time_limit"]
+    //arr["socks5"] = ["auth", "port", "client_id", "server_ip", "flow_reset", "flow_limit", "time_limit"]
+    //arr["httpProxy"] = ["auth", "port", "client_id", "server_ip", "flow_reset", "flow_limit", "time_limit"]
+    arr["secret"] = ["target_type", "target", "password", "client_id", "server_ip", "flow_reset", "flow_limit", "time_limit", "local_proxy"]
+    arr["p2p"] = ["target_type", "target", "password", "client_id", "server_ip", "flow_reset", "flow_limit", "time_limit", "local_proxy"]
     arr["file"] = ["port", "local_path", "strip_pre", "client_id", "server_ip", "flow_reset", "flow_limit", "time_limit"]
 
     function resetForm() {

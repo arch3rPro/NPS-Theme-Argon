@@ -1,4 +1,4 @@
-<div class="row tile" style="background-color: #1e1e2d;">
+<div class="row tile">
     <div class="col-md-12 col-md-auto">
         <div class="ibox float-e-margins">
             <h3 class="ibox-title" langtag="page-clientadd"></h3>
@@ -7,14 +7,14 @@
                     <div class="form-group" id="remark">
                         <label class="control-label font-bold" langtag="word-remark"></label>
                         <div class="col-sm-12">
-                            <input class="form-control" langtag="word-remark" name="remark" placeholder="" type="text" style="border-radius: 8px; border: 1px solid #4b4b5a; background-color: #2d2d3d; color: #ffffff; transition: all 0.3s ease;">
+                            <input class="form-control" langtag="word-remark" name="remark" placeholder="" type="text">
                         </div>
                     </div>
                     {{if eq true .allow_flow_limit}}
                     <div class="form-group" id="flow_limit">
                         <label class="control-label font-bold" langtag="word-flowlimit"></label>
                         <div class="col-sm-12">
-                            <input class="form-control" langtag="info-unrestricted" name="flow_limit" placeholder="" type="text" style="border-radius: 8px; border: 1px solid #4b4b5a; background-color: #2d2d3d; color: #ffffff; transition: all 0.3s ease;">
+                            <input class="form-control" langtag="info-unrestricted" name="flow_limit" placeholder="" type="text">
                             <span class="help-block m-b-none" langtag="word-unit"></span>: M
                         </div>
                     </div>
@@ -87,6 +87,12 @@
                             <input class="form-control" langtag="info-unrestricted" name="web_password" placeholder="" type="text">
                         </div>
                     </div>
+                    <div class="form-group" id="web_totp_secret">
+                        <label class="control-label font-bold" langtag="word-webtotpsecret"></label>
+                        <div class="col-sm-12">
+                            <input class="form-control" langtag="info-unrestricted" name="web_totp_secret" placeholder="" type="text">
+                        </div>
+                    </div>
                     {{end}}
                     <div class="form-group" id="config_conn_allow">
                         <label class="control-label font-bold" langtag="word-connectbyconfig"></label>
@@ -118,13 +124,13 @@
                     <div class="form-group" id="black_ip_list">
                         <label class="control-label font-bold" langtag="word-blackiplist"></label>
                         <div class="col-sm-12">
-                            <textarea class="form-control" langtag="info-suchasblackiplist" name="blackiplist" placeholder="" rows="4" type="text" style="border-radius: 8px; border: 1px solid #4b4b5a; background-color: #2d2d3d; color: #ffffff; transition: all 0.3s ease;">{{.BlackIpList}}</textarea>
+                            <textarea class="form-control" langtag="info-suchasblackiplist" name="blackiplist" placeholder="" rows="4" type="text">{{.BlackIpList}}</textarea>
                             <span class="help-block m-b-none" langtag="info-descblackiplist"></span>
                         </div>
                     </div>
                     <div class="hr-line-dashed"></div>
                     <div class="form-group">
-                        <div class="col-sm-4 col-sm-offset-2">
+                        <div class="col-lg-12 col-sm-offset-2">
                             <button class="btn btn-secondary" onclick="goback()" type="button">
                                 <i class="fa fa-fw fa-lg fa-window-close"></i> <span langtag="word-cancel"></span>
                             </button>

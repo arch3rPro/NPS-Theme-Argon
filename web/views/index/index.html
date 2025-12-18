@@ -1,23 +1,101 @@
 <div class="wrapper wrapper-content">
+    {{if eq false .isAdmin}}
     <div class="row">
         <div class="col-lg-3">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5 langtag="word-connectionport"></h5>
+                    <h5 langtag="word-tcpports"></h5>
                 </div>
                 <div class="ibox-content">
-                    <h1 class="no-margins">{{.p1}}</h1>
+                    <h1 class="no-margins">{{or .tcp_p "0"}} / {{or .tls_p "0"}}</h1>
                 </div>
             </div>
         </div>
-        {{if eq true .isAdmin}}
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5 langtag="word-kcpport"></h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{{or .kcp_p "0"}}</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5 langtag="word-wsports"></h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{{or .ws_p "0"}} / {{or .wss_p "0"}}</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5 langtag="word-wspath"></h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{{or .ws_path "/ws"}}</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5 langtag="word-serverip"></h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{{.ip}}</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5 langtag="word-serverversion"></h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{{.data.version}}</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5 langtag="word-minsupportversion"></h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{{.data.minVersion}}</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5 langtag="word-iprestriction"></h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins" langtag="word-{{or .data.ipLimit "false"}}"></h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{end}}
+
+    {{if eq true .isAdmin}}
+    <div class="row">
         <div class="col-lg-3">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h5 langtag="word-totalclients"></h5>
                 </div>
                 <div class="ibox-content">
-                    <h1 class="no-margins">{{.data.clientCount}}</h1>
+                    <h1 class="no-margins" id="stat-clientCount">{{.data.clientCount}}</h1>
                 </div>
             </div>
         </div>
@@ -28,7 +106,7 @@
                     <h5 langtag="word-onlineclients"></h5>
                 </div>
                 <div class="ibox-content">
-                    <h1 class="no-margins">{{.data.clientOnlineCount}}</h1>
+                    <h1 class="no-margins" id="stat-clientOnlineCount">{{.data.clientOnlineCount}}</h1>
                     {{/*<div class="stat-percent font-bold text-navy">44% <i class="fa fa-level-up"></i></div>*/}}
                     {{/*<small>新访客</small>*/}}
                 </div>
@@ -40,13 +118,21 @@
                     <h5 langtag="word-tcpconnections"></h5>
                 </div>
                 <div class="ibox-content">
-                    <h1 class="no-margins">{{.data.tcpCount}}</h1>
+                    <h1 class="no-margins" id="stat-tcpCount">{{.data.tcpCount}}</h1>
                 </div>
             </div>
         </div>
-        {{end}}
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5 langtag="word-uptime"></h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins" id="stat-upTime">{{or .data.upTime ""}}</h1>
+                </div>
+            </div>
+        </div>
     </div>
-
 
     <div class="row">
         <div class="col-lg-6">
@@ -67,31 +153,21 @@
                     <ul class="list-group">
                         <li class="list-group-item">
                             <div class="row">
-                                <div class="col-sm-6">
+                                <div class="col-sm-4">
                                     <strong langtag="word-bridgingmode"></strong>
                                 </div>
-                                <div class="col-sm-6 text-right">
-                                    <strong>{{.data.bridgeType}}</strong>
+                                <div class="col-sm-8 text-right">
+                                    <strong>{{if index . "tcp_p"}}TCP:{{.tcp_p}} {{end}}{{if index . "kcp_p"}}KCP:{{.kcp_p}} {{end}}{{if index . "tls_p"}}TLS:{{.tls_p}} {{end}}{{if index . "ws_p"}}WS:{{.ws_p}} {{end}}{{if index . "wss_p"}}WSS:{{.wss_p}} {{end}}{{if index . "ws_path"}}Path:{{.ws_path}}{{end}}</strong>
                                 </div>
                             </div>
                         </li>
                         <li class="list-group-item">
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <strong langtag="word-httpport"></strong>
+                                    <strong langtag="word-httpports"></strong>
                                 </div>
                                 <div class="col-sm-6 text-right">
-                                    <strong>{{.data.httpProxyPort}}</strong>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <strong langtag="word-httpsport"></strong>
-                                </div>
-                                <div class="col-sm-6 text-right">
-                                    <strong>{{.data.httpsProxyPort}}</strong>
+                                    <strong>{{or .data.httpProxyPort "0"}} / {{or .data.httpsProxyPort "0"}}</strong>
                                 </div>
                             </div>
                         </li>
@@ -101,7 +177,7 @@
                                     <strong langtag="word-iprestriction"></strong>
                                 </div>
                                 <div class="col-sm-6 text-right">
-                                    <strong langtag="word-{{.data.ipLimit}}"></strong>
+                                    <strong langtag="word-{{or .data.ipLimit "false"}}"></strong>
                                 </div>
                             </div>
                         </li>
@@ -127,21 +203,21 @@
                         </li>
                         <li class="list-group-item ">
                             <div class="row">
-                                <div class="col-sm-6">
-                                    <strong langtag="word-p2pport"></strong>
+                                <div class="col-sm-4">
+                                    <strong langtag="word-p2paddr"></strong>
                                 </div>
-                                <div class="col-sm-6 text-right">
-                                    <strong>{{.data.p2pPort}}</strong>
+                                <div class="col-sm-8 text-right">
+                                    <strong>{{.data.p2pAddr}}</strong>
                                 </div>
                             </div>
                         </li>
                         <li class="list-group-item ">
                             <div class="row">
-                                <div class="col-sm-6">
+                                <div class="col-sm-2">
                                     <strong langtag="word-serverip"></strong>
                                 </div>
-                                <div class="col-sm-6 text-right">
-                                    <strong>{{.data.serverIp}}</strong>
+                                <div class="col-sm-10 text-right">
+                                    <strong>{{.data.p2pIp}} | {{.data.serverIpv4}} | {{.data.serverIpv6}}</strong>
                                 </div>
                             </div>
                         </li>
@@ -151,7 +227,7 @@
                                     <strong langtag="word-serverversion"></strong>
                                 </div>
                                 <div class="col-sm-6 text-right">
-                                    <strong>{{.data.version}}</strong>
+                                    <strong>{{.data.version}} ({{.data.minVersion}})</strong>
                                 </div>
                             </div>
                         </li>
@@ -159,7 +235,7 @@
                 </div>
             </div>
         </div>
-        {{if eq true .isAdmin}}
+
         <div class="col-lg-6">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
@@ -411,6 +487,50 @@
     $("#overview_udp").text("{{.data.udp}}")
     $("#overview_send").text(changeunit({{.data.io_send}}) + "/s")
     $("#overview_recv").text(changeunit({{.data.io_recv}}) + "/s")
+
+    const chartTextColor = getComputedStyle(document.documentElement)
+        .getPropertyValue('--text').trim();
+    const chartBgColor   = getComputedStyle(document.documentElement)
+        .getPropertyValue('--bg').trim();
+
+    echarts.registerTheme('nps-theme', {
+        textStyle: {
+            color: chartTextColor,
+            textBorderColor: chartBgColor,
+            textBorderWidth: 0
+        },
+        axisPointer:  { label: { color: chartTextColor, textBorderColor: chartBgColor } },
+        tooltip:      { textStyle: { color: chartTextColor, textBorderColor: chartBgColor } },
+        legend:       { textStyle: { color: chartTextColor, textBorderColor: chartBgColor } },
+        xAxis:        { axisLabel: { color: chartTextColor, textBorderColor: chartBgColor } },
+        yAxis:        { axisLabel: { color: chartTextColor, textBorderColor: chartBgColor } },
+        series: [{
+            label: {
+                color: chartTextColor,
+                textBorderColor: chartBgColor,
+                textBorderWidth: 0
+            },
+            emphasis: {
+                label: {
+                    color: chartTextColor,
+                    textBorderColor: chartBgColor,
+                    textBorderWidth: 0
+                }
+            }
+        }],
+        pie: {
+            label: {
+                color: chartTextColor,
+                textBorderColor: chartBgColor,
+                textBorderWidth: 0
+            },
+            labelLine: {
+                lineStyle: {
+                    color: chartTextColor
+                }
+            }
+        }
+    });
 
     chartdatas['load'] = {
         tooltip: {
@@ -738,10 +858,85 @@
         ]
     };
 
+    window.charts = window.charts || {};
+    Object.keys(chartdatas).forEach(key => {
+        const dom = document.getElementById(key);
+        if (dom) {
+            window.charts[key] = echarts.init(dom, 'nps-theme');
+            window.charts[key].setOption(chartdatas[key]);
+        }
+    });
+
     window.addEventListener('resize', () => {
         for (var key in charts) {
             charts[key].resize();
         }
+    });
+
+    let upTimeSeconds = 0;
+
+    function formatUpTime(secs) {
+        const d = Math.floor(secs / 86400);
+        secs %= 86400;
+        const h = Math.floor(secs / 3600);
+        secs %= 3600;
+        const m = Math.floor(secs / 60);
+        const s = secs % 60;
+        const parts = [];
+        if (d) parts.push(d + 'd');
+        if (h) parts.push(h + 'h');
+        if (m) parts.push(m + 'm');
+        parts.push(s + 's');
+        return parts.join(' ');
+    }
+
+    function ensureChart(key) {
+        if (!charts[key]) {
+            const dom = document.getElementById(key);
+            if (dom) {
+                charts[key] = echarts.init(dom, 'nps-theme');
+            }
+        }
+    }
+
+    function refreshStats() {
+        $.getJSON('{{.web_base_url}}/index/stats', function(res) {
+            if (res.code !== 1) return;
+            const d = res.data;
+            $('#stat-clientCount').text(d.clientCount);
+            $('#stat-clientOnlineCount').text(d.clientOnlineCount);
+            $('#stat-tcpCount').text(d.tcpCount);
+            const nowSecs = Math.floor(Date.now() / 1000);
+            let calc = nowSecs - d.startTime;
+            if (!Number.isFinite(calc) || calc < 0) calc = 0;
+            if (Number.isFinite(d.upSecs)) {
+                upTimeSeconds = Math.abs(calc - d.upSecs) > 5 ? d.upSecs : calc;
+            } else {
+                upTimeSeconds = calc;
+            }
+            $('#overview_cpu').text(d.cpu + '%');
+            $('#overview_cpu_bar').width(d.cpu + '%');
+            $('#overview_memory').text(d.virtual_mem + '%');
+            $('#overview_memory_bar').width(d.virtual_mem + '%');
+            const loadObj = JSON.parse(d.load);
+            $('#overview_load')
+                .empty()
+                .append([loadObj.load1, loadObj.load5, loadObj.load15]
+                    .map(v => '&emsp;' + v).join(''));
+            $('#overview_tcp').text(d.tcp);
+            $('#overview_udp').text(d.udp);
+            $('#overview_send').text(changeunit(d.io_send) + '/s');
+            $('#overview_recv').text(changeunit(d.io_recv) + '/s');
+        });
+    }
+
+    $(function() {
+        refreshStats();
+        setInterval(refreshStats, 3000);
+        setInterval(function() {
+            upTimeSeconds++;
+            $('#stat-upTime').text(formatUpTime(upTimeSeconds));
+        }, 1000);
     });
 </script>
 {{end}}

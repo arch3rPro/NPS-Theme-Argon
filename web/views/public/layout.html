@@ -25,6 +25,7 @@
     <script src="{{.web_base_url}}/static/js/inspinia.js"></script>
     <!-- Latest compiled and minified Locales -->
     <script src="{{.web_base_url}}/static/js/language.js?v={{.version}}" type="text/javascript"></script>
+    {{.head_custom_code}}
 </head>
 
 <body class="pace-done fixed-nav fixed-nav-basic">
@@ -48,53 +49,60 @@
                     <div class="logo-element" langtag="application"></div>
                 </li>
                 <li class="{{if eq "index" .menu}}active{{end}}">
-                    <a href="{{.web_base_url}}/"><i class="fa fa-tachometer-alt fa-lg"></i>
+                    <a href="{{.web_base_url}}/" class="d-flex align-items-center">
+                    <i class="fa fa-tachometer-alt fa-lg fa-fw"></i>
                     <span class="nav-label" langtag="word-dashboard"></span></a>
                 </li>
                 <li class="{{if eq "client" .menu}}active{{end}}">
-                    <a href="{{.web_base_url}}/client/list"><i class="fa fa-desktop fa-lg"></i>
+                    <a href="{{.web_base_url}}/client/list" class="d-flex align-items-center">
+                    <i class="fa fa-desktop fa-lg fa-fw"></i>
                     <span class="nav-label" langtag="word-client"></span></a>
                 </li>
                 <li class="{{if eq "host" .menu}}active{{end}}">
-                    <a href="{{.web_base_url}}/index/hostlist"><i class="fa fa-globe fa-lg"></i>
+                    <a href="{{.web_base_url}}/index/hostlist" class="d-flex align-items-center">
+                    <i class="fa fa-globe fa-lg fa-fw"></i>
                     <span class="nav-label" langtag="scheme-host"></span></a>
                 </li>
                 <li class="{{if eq "tcp" .menu}}active{{end}}">
-                    <a href="{{.web_base_url}}/index/tcp"><i class="fa fa-retweet fa-lg"></i>
+                    <a href="{{.web_base_url}}/index/tcp" class="d-flex align-items-center">
+                    <i class="fa fa-retweet fa-lg fa-fw"></i>
                     <span class="nav-label" langtag="scheme-tcp"></span></a>
                 </li>
                 <li class="{{if eq "udp" .menu}}active{{end}}">
-                    <a href="{{.web_base_url}}/index/udp"><i class="fa fa-random fa-lg"></i>
+                    <a href="{{.web_base_url}}/index/udp" class="d-flex align-items-center">
+                    <i class="fa fa-random fa-lg fa-fw"></i>
                     <span class="nav-label" langtag="scheme-udp"></span></a>
                 </li>
-                <li class="{{if eq "http" .menu}}active{{end}}">
-                    <a href="{{.web_base_url}}/index/http"><i class="fa fa-server fa-lg"></i>
-                    <span class="nav-label" langtag="scheme-httpproxy"></span></a>
-                </li>
-                <li class="{{if eq "socks5" .menu}}active{{end}}">
-                    <a href="{{.web_base_url}}/index/socks5"><i class="fa fa-layer-group fa-lg"></i>
-                    <span class="nav-label" langtag="scheme-socks5"></span></a>
+                <li class="{{if eq "mix" .menu}}active{{end}}">
+                    <a href="{{.web_base_url}}/index/mix" class="d-flex align-items-center">
+                    <i class="fa fa-layer-group fa-lg fa-fw"></i>
+                    <span class="nav-label" langtag="scheme-mixproxy"></span></a>
                 </li>
                 <li class="{{if eq "secret" .menu}}active{{end}}">
-                    <a href="{{.web_base_url}}/index/secret"><i class="fa fa-low-vision fa-lg"></i>
+                    <a href="{{.web_base_url}}/index/secret" class="d-flex align-items-center">
+                    <i class="fa fa-low-vision fa-lg fa-fw"></i>
                     <span class="nav-label" langtag="scheme-secret"></span></a>
                 </li>
                 <li class="{{if eq "p2p" .menu}}active{{end}}">
-                    <a href="{{.web_base_url}}/index/p2p"><i class="fa fa-exchange-alt fa-lg"></i>
+                    <a href="{{.web_base_url}}/index/p2p" class="d-flex align-items-center">
+                    <i class="fa fa-exchange-alt fa-lg fa-fw"></i>
                     <span class="nav-label" langtag="scheme-p2p"></span></a>
                 </li>
                 <li class="{{if eq "file" .menu}}active{{end}}">
-                    <a href="{{.web_base_url}}/index/file"><i class="fa fa-briefcase fa-lg"></i>
+                    <a href="{{.web_base_url}}/index/file" class="d-flex align-items-center">
+                    <i class="fa fa-briefcase fa-lg fa-fw"></i>
                     <span class="nav-label" langtag="scheme-file"></span></a>
                 </li>
                 {{if eq true .isAdmin}}
                 <li class="{{if eq "global" .menu}}active{{end}}">
-                <a href="{{.web_base_url}}/global/index"><i class="fa fa-cog fa-lg"></i>
+                    <a href="{{.web_base_url}}/global/index" class="d-flex align-items-center">
+                    <i class="fa fa-cog fa-lg fa-fw"></i>
                     <span class="nav-label" langtag="word-globalparam"></span></a>
                 </li>
                 {{end}}
                 <li class="{{if eq "help" .menu}}active{{end}}">
-                    <a href="https://d-jy.net/docs/nps/" target="_blank"><i class="fa fa-lightbulb fa-lg"></i>
+                    <a href="https://d-jy.net/docs/nps/" target="_blank" class="d-flex align-items-center">
+                    <i class="fa fa-lightbulb fa-lg fa-fw"></i>
                     <span class="nav-label" langtag="word-help"></span></a>
                 </li>
             </ul>
@@ -102,7 +110,7 @@
     </nav>
     <div id="page-wrapper" class="gray-bg">
         <div class="row border-bottom">
-            <nav class="navbar white-bg navbar-fixed-top" role="navigation" style="margin-bottom: 0">
+            <nav class="navbar navbar-fixed-top" role="navigation" style="margin-bottom: 0">
 
                 <div class="navbar-header">
                     <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i></a>
@@ -113,16 +121,21 @@
                         <a href="https://github.com/djylb/nps" langtag="application"></a></span>
                     </li>
                     <li>
-                        <span class="btn-group dropdown">
-                            <button id="languagemenu" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fa fa-globe-asia fa-lg"></i>
-                                <span></span>
+                        <div class="ml-auto d-flex align-items-center" style="gap: 0.5rem;">
+                            <button id="theme-toggle" class="btn btn-outline-secondary" onclick="toggleTheme()">
+                                <i class="fa fa-moon"></i>
                             </button>
-                            <ul class="dropdown-menu"></ul>
-                        </span>
+                            <span class="btn-group dropdown">
+                                <button id="languagemenu" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fa fa-globe-asia fa-lg"></i>
+                                    <span></span>
+                                </button>
+                                <ul class="dropdown-menu"></ul>
+                            </span>
+                        </div>
                     </li>
                     <li>
-                        <a href="{{.web_base_url}}/login/out">
+                        <a href="{{.web_base_url}}/login/out" onclick="localStorage.clear(); return true;">
                             <i class="fa fa-sign-in-alt"></i><span langtag="word-logout"></span>
                         </a>
                     </li>
@@ -130,10 +143,10 @@
             </nav>
         </div>
 
-		<div class="page-content">
-    {{.LayoutContent}}
-		</div>
-		
+        <div class="page-content">
+        {{.LayoutContent}}
+        </div>
+        
         <div class="footer fixed">
             <div class="float-right">
                 <span langtag="word-readmore"></span> <strong><a href="https://github.com/djylb/nps" langtag="word-go"></a></strong>

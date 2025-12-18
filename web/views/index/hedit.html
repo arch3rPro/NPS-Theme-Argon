@@ -1,4 +1,4 @@
-<div class="row tile" style="background-color: #1e1e2d;">
+<div class="row tile">
     <div class="col-md-12 col-md-auto">
         <div class="ibox float-e-margins">
             <h3 class="ibox-title" langtag="page-hostedit"></h3>
@@ -76,6 +76,15 @@
                             </select>
                         </div>
                     </div>
+                    <div class="form-group" id="compat_mode">
+                        <label class="control-label font-bold" langtag="word-compatmode"></label>
+                        <div class="col-sm-12">
+                            <select class="form-control selectpicker" name="compat_mode">
+                                <option {{if eq false .h.CompatMode}}selected{{end}} value="0" langtag="word-no"></option>
+                                <option {{if eq true .h.CompatMode}}selected{{end}}  value="1" langtag="word-yes"></option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="form-group" id="https_just_proxy">
                         <label class="control-label font-bold" langtag="word-httpsjustproxy"></label>
                         <div class="col-sm-12">
@@ -83,6 +92,17 @@
                                 <option {{if eq false .h.HttpsJustProxy}}selected{{end}} value="0" langtag="word-no"></option>
                                 <option {{if eq true .h.HttpsJustProxy}}selected{{end}}  value="1" langtag="word-yes"></option>
                             </select>
+                            <span class="help-block m-b-none" langtag="info-httpsjustproxy"></span>
+                        </div>
+                    </div>
+                    <div class="form-group" id="tls_offload">
+                        <label class="control-label font-bold" langtag="word-tlsoffload"></label>
+                        <div class="col-sm-12">
+                            <select class="form-control selectpicker" name="tls_offload">
+                                <option {{if eq false .h.TlsOffload}}selected{{end}} value="0" langtag="word-no"></option>
+                                <option {{if eq true .h.TlsOffload}}selected{{end}}  value="1" langtag="word-yes"></option>
+                            </select>
+                            <span class="help-block m-b-none" langtag="info-tlsoffload"></span>
                         </div>
                     </div>
                     <div class="form-group" id="proxy_protocol">
@@ -95,16 +115,25 @@
                             </select>
                         </div>
                     </div>
+                    <div class="form-group" id="auto_ssl">
+                        <label class="control-label font-bold" langtag="word-autossl"></label>
+                        <div class="col-sm-12">
+                            <select class="form-control selectpicker" name="auto_ssl">
+                                <option {{if eq false .h.AutoSSL}}selected{{end}} value="0" langtag="word-no"></option>
+                                <option {{if eq true .h.AutoSSL}}selected{{end}}  value="1" langtag="word-yes"></option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="form-group" id="cert_file">
                         <label class="control-label font-bold" langtag="word-httpscert"></label>
                         <div class="col-sm-12">
-                            <textarea class="form-control" id="pemText" langtag="info-pemtext" name="cert_file_path" placeholder="" rows="6" type="text">{{.h.CertFilePath}}</textarea>
+                            <textarea class="form-control" id="pemText" langtag="info-pemtext" name="cert_file" placeholder="" rows="6" type="text">{{.h.CertFile}}</textarea>
                         </div>
                     </div>
                     <div class="form-group" id="key_file">
                         <label class="control-label font-bold" langtag="word-httpskey"></label>
                         <div class="col-sm-12">
-                            <textarea class="form-control" id="pemKey" langtag="info-pemkey" name="key_file_path" placeholder="" rows="6" type="text">{{.h.KeyFilePath}}</textarea>
+                            <textarea class="form-control" id="pemKey" langtag="info-pemkey" name="key_file" placeholder="" rows="6" type="text">{{.h.KeyFile}}</textarea>
                         </div>
                     </div>
                     <div class="form-group">
@@ -113,7 +142,19 @@
                             <input class="form-control" langtag="info-unrestricted" name="location" placeholder="" type="text" value="{{.h.Location}}">
                         </div>
                     </div>
-                    {{if eq true .allow_local_proxy}}
+                    <div class="form-group">
+                        <label class="control-label font-bold" langtag="word-urlrewrite"></label>
+                        <div class="col-sm-12">
+                            <input class="form-control" langtag="info-urlrewrite" name="path_rewrite" placeholder="" type="text" value="{{.h.PathRewrite}}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label font-bold" langtag="word-redirecturl"></label>
+                        <div class="col-sm-12">
+                            <input class="form-control" langtag="info-redirecturl" name="redirect_url" placeholder="" type="text" value="{{.h.RedirectURL}}">
+                        </div>
+                    </div>
+                    {{if and .allow_local_proxy (or .isAdmin .allow_user_local)}}
                     <div class="form-group" id="local_proxy">
                         <label class="control-label font-bold" langtag="word-proxytolocal"></label>
                         <div class="col-sm-12">
@@ -154,6 +195,13 @@
                             <span class="help-block m-b-none" langtag="info-header"></span>
                         </div>
                     </div>
+                    <div class="form-group" id="resp_header">
+                        <label class="control-label font-bold" langtag="word-responseheader"></label>
+                        <div class="col-sm-12">
+                            <textarea class="form-control" name="resp_header" placeholder="Strict-Transport-Security: max-age=31536000; includeSubDomains; preload" rows="4" type="text">{{.h.RespHeaderChange}}</textarea>
+                            <span class="help-block m-b-none" langtag="info-header"></span>
+                        </div>
+                    </div>
                     <div class="form-group" id="hostchange">
                         <label class="control-label font-bold" langtag="word-requesthost"></label>
                         <div class="col-sm-12">
@@ -162,7 +210,7 @@
                     </div>
                     <div class="hr-line-dashed"></div>
                     <div class="form-group">
-                        <div class="col-sm-4 col-sm-offset-2">
+                        <div class="col-lg-12 col-sm-offset-2">
                             <button class="btn btn-secondary" onclick="goback()" type="button">
                                 <i class="fa fa-fw fa-lg fa-window-close"></i> <span langtag="word-cancel"></span>
                             </button>
@@ -182,22 +230,35 @@
 
 <script>
     $(function () {
+        ["header", "resp_header", "redirect_url"].forEach(function(name){
+            var el = document.getElementsByName(name)[0];
+            if (el) {
+                var div = document.createElement("div");
+                div.innerHTML = el.value;
+                div.innerHTML = div.textContent;
+                el.value = div.textContent;
+            }
+        });
+
         if ($("#scheme_select").val() == "all" || $("#scheme_select").val() == "https") {
             $("#auto_https").css("display", "block")
             $("#https_just_proxy").css("display", "block")
             if ($("#https_just_proxy_select").val() == "1") {
-                $("#proxy_protocol").css("display", "block")
+                $("#tls_offload").css("display", "none")
+                $("#auto_ssl").css("display", "none")
                 $("#cert_file").css("display", "none")
                 $("#key_file").css("display", "none")
             } else {
-                $("#proxy_protocol").css("display", "none")
+                $("#tls_offload").css("display", "block")
+                $("#auto_ssl").css("display", "block")
                 $("#cert_file").css("display", "block")
                 $("#key_file").css("display", "block")
             }
         } else {
+            $("#tls_offload").css("display", "none")
+            $("#auto_ssl").css("display", "none")
             $("#cert_file").css("display", "none")
             $("#key_file").css("display", "none")
-            $("#proxy_protocol").css("display", "none")
             $("#https_just_proxy").css("display", "none")
             $("#auto_https").css("display", "none")
         }
@@ -240,18 +301,21 @@
                 $("#auto_https").css("display", "block")
                 $("#https_just_proxy").css("display", "block")
                 if ($("#https_just_proxy_select").val() == "1") {
-                    $("#proxy_protocol").css("display", "block")
+                    $("#tls_offload").css("display", "none")
+                    $("#auto_ssl").css("display", "none")
                     $("#cert_file").css("display", "none")
                     $("#key_file").css("display", "none")
                 } else {
-                    $("#proxy_protocol").css("display", "none")
+                    $("#tls_offload").css("display", "block")
+                    $("#auto_ssl").css("display", "block")
                     $("#cert_file").css("display", "block")
                     $("#key_file").css("display", "block")
                 }
             } else {
+                $("#tls_offload").css("display", "none")
+                $("#auto_ssl").css("display", "none")
                 $("#cert_file").css("display", "none")
                 $("#key_file").css("display", "none")
-                $("#proxy_protocol").css("display", "none")
                 $("#https_just_proxy").css("display", "none")
                 $("#auto_https").css("display", "none")
             }
@@ -259,11 +323,13 @@
 
         $("#https_just_proxy_select").on("change", function () {
             if ($("#https_just_proxy_select").val() == "1") {
-                $("#proxy_protocol").css("display", "block")
+                $("#tls_offload").css("display", "none")
+                $("#auto_ssl").css("display", "none")
                 $("#cert_file").css("display", "none")
                 $("#key_file").css("display", "none")
             } else {
-                $("#proxy_protocol").css("display", "none")
+                $("#tls_offload").css("display", "block")
+                $("#auto_ssl").css("display", "block")
                 $("#cert_file").css("display", "block")
                 $("#key_file").css("display", "block")
             }
